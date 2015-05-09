@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# Path to the AbuseIO repository
+ABUSEIO_PATH = "../AbuseIO"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "ubuntu/trusty64"
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 3306, host: 3307
+
+  #abuseio
+
+  # copy database and config files to vagrant
+  config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
+  config.vm.provision "file", source: "config/crontab", destination: "/tmp/crontab"
+  config.vm.provision "file", source: "config/fetchmailrc", destination: "/tmp/fetchmailrc"
+  config.vm.provision "file", source: "config/ssmtp.conf", destination: "/tmp/ssmtp.conf"
+  config.vm.provision "file", source: "config/revaliases", destination: "/tmp/revaliases"
+
+  # sync the abusio repository to the guest
+  config.vm.synced_folder ABUSEIO_PATH, "/abuseio"
+
+  # execute bootstrap script
+  config.vm.provision "shell", path: "config/bootstrap.sh"
+end
