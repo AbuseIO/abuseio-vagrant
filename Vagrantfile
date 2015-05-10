@@ -26,6 +26,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 3306, host: 3307
 
+  # increase base memory to 1G
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+  end
+
   #abuseio
 
   # copy database and config files to vagrant
