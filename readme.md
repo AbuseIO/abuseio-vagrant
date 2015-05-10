@@ -12,7 +12,7 @@ relic of the past. For more information see [vagrantup.com](http://vagrantup.com
 
 #### AbuseIO path
 The setup expects that you already have a clone of [AbuseIO](https://github.com/AbuseIO/AbuseIO) on your system, the path to the repository
-can be set withe ABUSEIO_PATH variable in Vagrantfile.
+can be set with the ABUSEIO_PATH variable in the Vagrantfile.
 
 
     # -*- mode: ruby -*-
@@ -25,8 +25,8 @@ can be set withe ABUSEIO_PATH variable in Vagrantfile.
     ABUSEIO_PATH = "../AbuseIO"
 
 #### email settings
-The vagrant environment uses fetchmail and ssmtp instead of postfix to fetch and receive mail, you want to modify ssmtp.conf and fetchmailrc 
-in the config directory, so it will use your own email credentials.
+The vagrant environment uses fetchmail and ssmtp instead of postfix, to process mail, you will want to modify ssmtp.conf and fetchmailrc 
+in the config directory, to use your own email credentials.
 
 ### Running the vagrant environment
 
