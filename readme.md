@@ -2,6 +2,7 @@
 
 ### What is it
 The repository contains a Vagrantfile and some specific config files to create a development environment for AbuseIO using Vagrant.
+This branch is optimalised for the MVC development branch of AbuseIO-4.0
 
 #### About Vagrant
 Vagrant is a tool for building complete development environments. With an easy-to-use workflow and focus on automation, Vagrant 
@@ -34,5 +35,9 @@ Just type
 
     vagrant up
 
+Vagrant will expose the following ports:
+
+    http -> localhost:8080
+    mysql -> localhost:3307
 
 

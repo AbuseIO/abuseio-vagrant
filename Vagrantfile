@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 # Path to the AbuseIO repository
-ABUSEIO_PATH = "../AbuseIO"
+ABUSEIO_PATH = "../../IdeaProjects/AbuseIO"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #abuseio
 
   # copy database and config files to vagrant
-  config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
+  # config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
   config.vm.provision "file", source: "config/crontab", destination: "/tmp/crontab"
   config.vm.provision "file", source: "config/fetchmailrc", destination: "/tmp/fetchmailrc"
   config.vm.provision "file", source: "config/ssmtp.conf", destination: "/tmp/ssmtp.conf"
