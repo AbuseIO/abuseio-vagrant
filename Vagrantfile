@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 # Path to the AbuseIO repository
-ABUSEIO_PATH = "../../IdeaProjects/AbuseIO"
+ABUSEIO_PATH = "../AbuseIO"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
