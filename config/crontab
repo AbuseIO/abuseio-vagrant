@@ -1,4 +1,2 @@
 # m h dom mon dow user  command
-10 * * * *     root    /abuseio/bin/housekeeper
-*/15 * * * *   root    /abuseio/bin/notifier
-*/5 * * * *    root    /usr/bin/fetchmail &> /dev/null
+*/2 * * * *    root    /usr/bin/fetchmail &> /dev/null

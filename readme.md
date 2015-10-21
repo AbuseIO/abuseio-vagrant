@@ -34,5 +34,6 @@ Just type
 
     vagrant up
 
+and connect to [http://localhost:8080/admin]
 
 

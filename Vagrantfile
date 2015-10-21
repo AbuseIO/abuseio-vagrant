@@ -34,11 +34,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #abuseio
 
   # copy database and config files to vagrant
-  config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
+  #config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
   config.vm.provision "file", source: "config/crontab", destination: "/tmp/crontab"
   config.vm.provision "file", source: "config/fetchmailrc", destination: "/tmp/fetchmailrc"
   config.vm.provision "file", source: "config/ssmtp.conf", destination: "/tmp/ssmtp.conf"
   config.vm.provision "file", source: "config/revaliases", destination: "/tmp/revaliases"
+  config.vm.provision "file", source: "config/resolv.conf", destination: "/tmp/resolv/conf"
+  config.vm.provision "file", source: "config/abuseio_queue_email.conf", destination: "/tmp/abuseio_queue_email.conf"
+  config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
+  config.vm.provision "file", source: "config/000-abuseio.conf", destination: "/tmp/000-abuseio.conf"
 
   # sync the abusio repository to the guest
   config.vm.synced_folder ABUSEIO_PATH, "/abuseio"
