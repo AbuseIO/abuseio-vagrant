@@ -21,7 +21,7 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	apache2 apache2-utils beanstalkd mysql-server mysql-client php5 php5-mysql \
 	php-mail-mimedecode php5-cli php5-curl php5-mysql php-pear \
-	fetchmail ssmtp supervisor php5-dev git php5-mcrypt unzip
+	fetchmail ssmtp supervisor php5-dev git php5-mcrypt unzip php5-intl
 
 echo "===== Updating mysql config ====="
 
@@ -48,6 +48,10 @@ cp /etc/apache2/envvars /etc/apache2/envvars.old #backup
 sed s:www-data:vagrant: /etc/apache2/envvars.old > /etc/apache2/envvars
 
 service apache2 start
+
+# add vagrant to the all the groups for ubuntu
+cp /etc/group /etc/group.old
+sed 's/ubuntu$/ubuntu,vagrant/' /etc/group.old > /etc/group
 
 echo "===== Creating AbuseIO databse user ====="
 
@@ -78,7 +82,7 @@ curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
 echo "===== installing dependencies ====="
-pecl install mailparse
+pecl install mailparse-2.1.6
 echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
 php5enmod mailparse
 php5enmod mcrypt
@@ -93,9 +97,9 @@ echo "===== Installing abuseio environment ======"
 cp /tmp/.env /abuseio/.env
 
 echo "===== Fixing file permisions ====="
-chown -R vagrant:vagrant  /abuseio
-chmod -R 750 /abuseio/storage
-chmod 755 /abuseio/bootstrap/cache
+#sudo chown -R vagrant:vagrant  /abuseio
+sudo chmod -R 750 /abuseio/storage
+sudo chmod 755 /abuseio/bootstrap/cache
 
 echo "===== Abuseio Installation ====="
 cd /abuseio

@@ -31,6 +31,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 2048
   end
 
+  # Required for NFS to work, pick any local IP
+  config.vm.network :private_network, ip: '192.168.50.50'
+  # Use NFS for shared folders for better performance
+  config.vm.synced_folder '.', '/vagrant', nfs: true
+
   #abuseio
 
   # copy database and config files to vagrant
@@ -45,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "config/000-abuseio.conf", destination: "/tmp/000-abuseio.conf"
 
   # sync the abusio repository to the guest
-  config.vm.synced_folder ABUSEIO_PATH, "/abuseio"
+  config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true
 
   # execute bootstrap script
   config.vm.provision "shell", path: "config/bootstrap.sh"
