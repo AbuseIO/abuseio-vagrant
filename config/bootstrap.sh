@@ -33,7 +33,6 @@ service mysql restart
 
 echo "===== Updating apache config ====="
 
-htpasswd -b -c /abuseio/htpasswd admin abuseio
 cp /tmp/000-abuseio.conf /etc/apache2/sites-available
 rm -f /etc/apache2/sites-enabled/000*
 ln -s /etc/apache2/sites-available/000-abuseio.conf /etc/apache2/sites-enabled
