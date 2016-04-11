@@ -2,3 +2,5 @@
 .vagrant/*
 .idea
 .idea/*
+
+config/composer-config.json

@@ -28,6 +28,18 @@ can be set with the ABUSEIO_PATH variable in the Vagrantfile.
 The vagrant environment uses fetchmail and ssmtp instead of postfix, to process mail, you will want to modify ssmtp.conf and fetchmailrc 
 in the config directory, to use your own email credentials.
 
+#### github settings
+AbuseIO retrieves a lot of packages form github using composer, this will trigger a oath token request from github. You need to add
+the github token to the config/composer-config.json file.
+
+You can retrieve the token using
+
+     # normal password authentification
+     curl -u 'github user' curl -d '{"note":"GitHub OAuth token for composer"}' https://api.github.com/authorizations
+     
+     # two factor authentification, replace the 000000 in the header with your TOTP
+     curl -u 'github user' curl --header "X-GitHub-OTP: 000000" -d '{"note":"GitHub OAuth token for composer"}' https://api.github.com/authorizations
+
 ### Running the vagrant environment
 
 Just type 

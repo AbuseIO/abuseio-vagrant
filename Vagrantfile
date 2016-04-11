@@ -48,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "config/abuseio_queue_email.conf", destination: "/tmp/abuseio_queue_email.conf"
   config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
   config.vm.provision "file", source: "config/000-abuseio.conf", destination: "/tmp/000-abuseio.conf"
+  config.vm.provision "file", source: "config/composer-config.json", destination: "/tmp/config.json"
 
   # sync the abusio repository to the guest
   config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true

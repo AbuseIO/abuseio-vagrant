@@ -75,10 +75,14 @@ supervisorctl reread
 supervisorctl add abuseio_queue_emails
 supervisorctl start abuseio_queue_emails
 
-echo "===== Installing composer ======"
+echo "===== Installing composer and GitHub OATH ======"
 cd /tmp
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
+sudo -u vagrant mkdir /home/vagrant/.composer
+sudo -u vagrant cp /tmp/config.json /home/vagrant/.composer
+rm -rf /root/.composer
+ln -s /home/vagrant/.composer /root/.composer
 
 echo "===== installing dependencies ====="
 pecl install mailparse-2.1.6
