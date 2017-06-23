@@ -2,7 +2,7 @@
 
 
 # if you change the database credentials, also change them in abuseio.env
-MYSQL_ROOT_PASSWORD='vagrant'
+MYSQL_ROOT_PASSWORD='ubuntu'
 DB_USER='abuseio'
 DB_NAME='abuseio'
 SQL_DIR='/tmp'
@@ -19,9 +19,9 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 
 # install packages
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	apache2 apache2-utils beanstalkd mysql-server mysql-client php5 php5-mysql \
-	php-mail-mimedecode php5-cli php5-curl php5-mysql php-pear \
-	fetchmail ssmtp supervisor php5-dev git php5-mcrypt unzip php5-intl
+	nginx beanstalkd mysql-server mysql-client\
+	php php-mail-mimedecode php-cli php-curl php-mysql php-pear php-pgsql php-intl php-bcmath\
+	php-dev php-mcrypt php-mbstring php-fpm git unzip fetchmail supervisor
 
 echo "===== Updating mysql config ====="
 
@@ -31,28 +31,17 @@ sed s:127.0.0.1:0.0.0.0: /etc/mysql/my.cnf.old > /etc/mysql/my.cnf
 
 service mysql restart
 
-echo "===== Updating apache config ====="
+echo "===== Updating Nginx config ====="
 
-cp /tmp/000-abuseio.conf /etc/apache2/sites-available
-rm -f /etc/apache2/sites-enabled/000*
-ln -s /etc/apache2/sites-available/000-abuseio.conf /etc/apache2/sites-enabled
+cp /tmp/abuseio.conf /etc/nginx/sites-available
+rm -f /etc/nginx/sites-enabled/*
+ln -s /etc/nginx/sites-available/abuseio.conf /etc/nginx/sites-enabled
 
-a2enmod rewrite
-a2enmod headers
+echo "===== Tweaking php-fpm ====="
+sed -i -e "s/listen = \/run\/php\/php7.0-fpm.sock/listen = 127.0.0.1:9000/g" \
+    /etc/php/7.0/fpm/pool.d/www.conf
 
-# update envvars and restart
-service apache2 stop
-
-cp /etc/apache2/envvars /etc/apache2/envvars.old #backup
-sed s:www-data:vagrant: /etc/apache2/envvars.old > /etc/apache2/envvars
-
-service apache2 start
-
-# add vagrant to the all the groups for ubuntu
-cp /etc/group /etc/group.old
-sed 's/ubuntu$/ubuntu,vagrant/' /etc/group.old > /etc/group
-
-echo "===== Creating AbuseIO databse user ====="
+echo "===== Creating AbuseIO database user ====="
 
 # let the root mysql user login from anywhere
 echo "grant all privileges on *.* to 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD' with grant option;" | mysql --user=root --password=$MYSQL_ROOT_PASSWORD
@@ -79,44 +68,54 @@ echo "===== Installing composer and GitHub OATH ======"
 cd /tmp
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-sudo -u vagrant mkdir /home/vagrant/.composer
-sudo -u vagrant cp /tmp/config.json /home/vagrant/.composer
+sudo -u ubuntu mkdir /home/ubuntu/.composer
+sudo -u ubuntu cp /tmp/config.json /home/ubuntu/.composer
 rm -rf /root/.composer
-ln -s /home/vagrant/.composer /root/.composer
+ln -s /home/ubuntu/.composer /root/.composer
 
-echo "===== installing dependencies ====="
-pecl install mailparse-2.1.6
-echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
-php5enmod mailparse
-php5enmod mcrypt
+echo "===== tweak mbstring ====="
 
-echo "===== Installing ssmtp config files ====="
-cp /tmp/ssmtp.conf /etc/ssmtp/ssmtp.conf
-cp /tmp/revaliases /etc/ssmtp/revaliases
+cp /usr/include/php/20151012/ext/mbstring/libmbfl/mbfl/mbfilter.h .
+awk '/#define MBFL_MBFILTER_H/{print;print "#undef HAVE_MBSTRING\n#define HAVE_MBSTRING 1";next}1' \
+    mbfilter.h > /usr/include/php/20151012/ext/mbstring/libmbfl/mbfl/mbfilter.h
 
-chmod 600 ~/.fetchmailrc
+echo "===== installing mailparse ====="
+
+pecl install mailparse
+echo "extension=mailparse.so" > /etc/php/7.0/mods-available/mailparse.ini
+phpenmod mailparse
+phpenmod mcrypt
 
 echo "===== Installing abuseio environment ======"
 cp /tmp/.env /abuseio/.env
 
 echo "===== Fixing file permisions ====="
-#sudo chown -R vagrant:vagrant  /abuseio
+#sudo chown -R ubuntu:ubuntu  /abuseio
 sudo chmod -R 750 /abuseio/storage
 sudo chmod 755 /abuseio/bootstrap/cache
 
 echo "===== Abuseio Installation ====="
 cd /abuseio
-sudo -u vagrant composer update
+
+echo "===== Workaround MacOS NFS ====="
+# https://github.com/mitchellh/vagrant/issues/8061#issuecomment-291954060
+sudo -u ubuntu find . -type d \
+	-exec touch '{}'/.touch ';' \
+	-exec rm -f '{}'/.touch ';' \
+	2>/dev/null
+
+sudo -u ubuntu composer update
 cp /tmp/.env /abuseio/.env
 
 cd /abuseio
-sudo -u vagrant php artisan migrate:install
-sudo -u vagrant php artisan migrate
-sudo -u vagrant php artisan key:generate
-sudo -u vagrant php artisan db:seed
+sudo -u ubuntu php artisan migrate:install
+sudo -u ubuntu php artisan migrate
+sudo -u ubuntu php artisan key:generate
+sudo -u ubuntu php artisan db:seed
 
-echo "===== Apache2 restart ====="
-service apache2 restart
+echo "===== Nginx / php-fpm restart ====="
+service php7.0-fpm restart
+service nginx restart
 
 echo "===== Done ====="
 

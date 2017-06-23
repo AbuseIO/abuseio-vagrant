@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -42,12 +42,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.provision "file", source: ABUSEIO_PATH + "/sql/abuseio.sql", destination: "/tmp/abuseio.sql"
   config.vm.provision "file", source: "config/crontab", destination: "/tmp/crontab"
   config.vm.provision "file", source: "config/fetchmailrc", destination: "/tmp/fetchmailrc"
-  config.vm.provision "file", source: "config/ssmtp.conf", destination: "/tmp/ssmtp.conf"
-  config.vm.provision "file", source: "config/revaliases", destination: "/tmp/revaliases"
   config.vm.provision "file", source: "config/resolv.conf", destination: "/tmp/resolv/conf"
   config.vm.provision "file", source: "config/abuseio_queue_email.conf", destination: "/tmp/abuseio_queue_email.conf"
   config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
-  config.vm.provision "file", source: "config/000-abuseio.conf", destination: "/tmp/000-abuseio.conf"
+  config.vm.provision "file", source: "config/abuseio.conf", destination: "/tmp/abuseio.conf"
   config.vm.provision "file", source: "config/composer-config.json", destination: "/tmp/config.json"
 
   # sync the abusio repository to the guest
