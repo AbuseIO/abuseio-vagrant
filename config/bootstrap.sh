@@ -21,7 +21,7 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	nginx beanstalkd mysql-server mysql-client\
 	php php-mail-mimedecode php-cli php-curl php-mysql php-pear php-pgsql php-intl php-bcmath\
-	php-dev php-mcrypt php-mbstring php-fpm git unzip fetchmail supervisor
+	php-dev php-mcrypt php-mbstring php-fpm php-zip git unzip fetchmail supervisor
 
 echo "===== Updating mysql config ====="
 
