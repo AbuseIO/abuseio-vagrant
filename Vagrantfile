@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 # Path to the AbuseIO repository
-ABUSEIO_PATH = "../AbuseIO"
+ABUSEIO_PATH = "../abuseio-current"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -34,12 +34,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Required for NFS to work, pick any local IP
   config.vm.network :private_network, ip: '192.168.50.50'
   # Use NFS for shared folders for better performance (doesn't work on macos High Sierra) default off
-  # config.vm.synced_folder '.', '/vagrant', nfs: true
+  # config.vm.synced_folder '.', '/vagrant', nfs: true, mount_options: ["rw", "tcp", "nolock", "noacl", "async"]
+
 
   config.vm.synced_folder '.', '/vagrant'
 
   # sync the abusio repository to the guest
-  # config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true
+  # config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true, mount_options: ["rw", "tcp", "nolock", "noacl", "async"]
 
   config.vm.synced_folder ABUSEIO_PATH, "/abuseio"
 
