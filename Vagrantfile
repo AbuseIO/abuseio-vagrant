@@ -33,8 +33,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Required for NFS to work, pick any local IP
   config.vm.network :private_network, ip: '192.168.50.50'
-  # Use NFS for shared folders for better performance
-  config.vm.synced_folder '.', '/vagrant', nfs: true
+  # Use NFS for shared folders for better performance (doesn't work on macos High Sierra) default off
+  # config.vm.synced_folder '.', '/vagrant', nfs: true
+
+  config.vm.synced_folder '.', '/vagrant'
+
+  # sync the abusio repository to the guest
+  # config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true
+
+  config.vm.synced_folder ABUSEIO_PATH, "/abuseio"
 
   #abuseio
 
@@ -47,9 +54,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
   config.vm.provision "file", source: "config/abuseio.conf", destination: "/tmp/abuseio.conf"
   config.vm.provision "file", source: "config/composer-config.json", destination: "/tmp/config.json"
-
-  # sync the abusio repository to the guest
-  config.vm.synced_folder ABUSEIO_PATH, "/abuseio", nfs: true
 
   # execute bootstrap script
   config.vm.provision "shell", path: "config/bootstrap.sh"

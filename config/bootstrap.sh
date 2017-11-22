@@ -41,6 +41,9 @@ echo "===== Tweaking php-fpm ====="
 sed -i -e "s/listen = \/run\/php\/php7.0-fpm.sock/listen = 127.0.0.1:9000/g" \
     /etc/php/7.0/fpm/pool.d/www.conf
 
+sed -i -e "s/^user = www-data/user = ubuntu/g" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i -e "s/^group = www-data/group = ubuntu/g" /etc/php/7.0/fpm/pool.d/www.conf
+
 echo "===== Creating AbuseIO database user ====="
 
 # let the root mysql user login from anywhere
