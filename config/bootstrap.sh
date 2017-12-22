@@ -121,11 +121,7 @@ supervisorctl add abuseio_queue_collector
 supervisorctl add abuseio_queue_delegation
 supervisorctl add abuseio_queue_email_incoming
 supervisorctl add abuseio_queue_email_outgoing
-supervisorctl start abuseio_queue_collector
-supervisorctl start abuseio_queue_delegation
-supervisorctl start abuseio_queue_email_incoming
-supervisorctl start abuseio_queue_email_outgoing
-
+supervisorctl start all
 
 echo "===== Done ====="
 
