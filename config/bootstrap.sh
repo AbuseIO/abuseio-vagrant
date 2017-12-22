@@ -61,18 +61,6 @@ echo "===== Installing fetchmailrc ====="
 cp /tmp/fetchmailrc ~/.fetchmailrc
 chmod 600 ~/.fetchmailrc
 
-echo "===== Installing supervisor config ====="
-cp /tmp/*queue*.conf /etc/supervisor/conf.d/
-supervisorctl reread
-supervisorctl add abuseio_queue_collector
-supervisorctl add abuseio_queue_delegation
-supervisorctl add abuseio_queue_email_incoming
-supervisorctl add abuseio_queue_email_outgoing
-supervisorctl start abuseio_queue_collector
-supervisorctl start abuseio_queue_delegation
-supervisorctl start abuseio_queue_email_incoming
-supervisorctl start abuseio_queue_email_outgoing
-
 echo "===== Installing composer and GitHub OATH ======"
 cd /tmp
 curl -sS https://getcomposer.org/installer | php
@@ -125,6 +113,19 @@ sudo -u ubuntu php artisan db:seed
 echo "===== Nginx / php-fpm restart ====="
 service php7.0-fpm restart
 service nginx restart
+
+echo "===== Installing supervisor config ====="
+cp /tmp/*queue*.conf /etc/supervisor/conf.d/
+supervisorctl reread
+supervisorctl add abuseio_queue_collector
+supervisorctl add abuseio_queue_delegation
+supervisorctl add abuseio_queue_email_incoming
+supervisorctl add abuseio_queue_email_outgoing
+supervisorctl start abuseio_queue_collector
+supervisorctl start abuseio_queue_delegation
+supervisorctl start abuseio_queue_email_incoming
+supervisorctl start abuseio_queue_email_outgoing
+
 
 echo "===== Done ====="
 
