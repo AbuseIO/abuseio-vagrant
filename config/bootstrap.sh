@@ -62,10 +62,16 @@ cp /tmp/fetchmailrc ~/.fetchmailrc
 chmod 600 ~/.fetchmailrc
 
 echo "===== Installing supervisor config ====="
-cp /tmp/abuseio_queue_email.conf /etc/supervisor/conf.d/abuseio_queue_email.conf
+cp /abuseio/extra/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 supervisorctl reread
-supervisorctl add abuseio_queue_emails
-supervisorctl start abuseio_queue_emails
+supervisorctl add abuseio_queue_collector
+supervisorctl add abuseio_queue_delegation
+supervisorctl add abuseio_queue_email_incoming
+supervisorctl add abuseio_queue_email_outgoing
+supervisorctl start abuseio_queue_collector
+supervisorctl start abuseio_queue_delegation
+supervisorctl start abuseio_queue_email_incoming
+supervisorctl start abuseio_queue_email_outgoing
 
 echo "===== Installing composer and GitHub OATH ======"
 cd /tmp

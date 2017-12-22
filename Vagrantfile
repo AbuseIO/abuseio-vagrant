@@ -51,7 +51,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "config/crontab", destination: "/tmp/crontab"
   config.vm.provision "file", source: "config/fetchmailrc", destination: "/tmp/fetchmailrc"
   config.vm.provision "file", source: "config/resolv.conf", destination: "/tmp/resolv/conf"
-  config.vm.provision "file", source: "config/abuseio_queue_email.conf", destination: "/tmp/abuseio_queue_email.conf"
   config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
   config.vm.provision "file", source: "config/abuseio.conf", destination: "/tmp/abuseio.conf"
   config.vm.provision "file", source: "config/composer-config.json", destination: "/tmp/config.json"
