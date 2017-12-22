@@ -62,7 +62,7 @@ cp /tmp/fetchmailrc ~/.fetchmailrc
 chmod 600 ~/.fetchmailrc
 
 echo "===== Installing supervisor config ====="
-cp /abuseio/extra/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+cp /tmp/*queue*.conf /etc/supervisor/conf.d/
 supervisorctl reread
 supervisorctl add abuseio_queue_collector
 supervisorctl add abuseio_queue_delegation

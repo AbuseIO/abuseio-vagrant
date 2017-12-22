@@ -53,6 +53,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "config/resolv.conf", destination: "/tmp/resolv/conf"
   config.vm.provision "file", source: "config/abuseio.env", destination: "/tmp/.env"
   config.vm.provision "file", source: "config/abuseio.conf", destination: "/tmp/abuseio.conf"
+  config.vm.provision "file", source: "config/abuseio_collector.conf", destination: "/tmp/abuseio_queue_collector.conf"
+  config.vm.provision "file", source: "config/abuseio_delegation.conf", destination: "/tmp/abuseio_queue_delegation.conf"
+  config.vm.provision "file", source: "config/abuseio_email_incoming.conf", destination: "/tmp/abuseio_queue_email_incoming.conf"
+  config.vm.provision "file", source: "config/abuseio_email_outgoing.conf", destination: "/tmp/abuseio_queue_email_outgoing.conf"
   config.vm.provision "file", source: "config/composer-config.json", destination: "/tmp/config.json"
 
   # execute bootstrap script
