@@ -41,8 +41,8 @@ echo "===== Tweaking php-fpm ====="
 sed -i -e "s/listen = \/run\/php\/php7.0-fpm.sock/listen = 127.0.0.1:9000/g" \
     /etc/php/7.0/fpm/pool.d/www.conf
 
-sed -i -e "s/^user = www-data/user = ubuntu/g" /etc/php/7.0/fpm/pool.d/www.conf
-sed -i -e "s/^group = www-data/group = ubuntu/g" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i -e "s/^user = www-data/user = vagrant/g" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i -e "s/^group = www-data/group = vagrant/g" /etc/php/7.0/fpm/pool.d/www.conf
 
 echo "===== Creating AbuseIO database user ====="
 
@@ -65,10 +65,10 @@ echo "===== Installing composer and GitHub OATH ======"
 cd /tmp
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-sudo -u ubuntu mkdir /home/ubuntu/.composer
-sudo -u ubuntu cp /tmp/config.json /home/ubuntu/.composer
+sudo -u vagrant mkdir /home/vagrant/.composer
+sudo -u vagrant cp /tmp/config.json /home/vagrant/.composer
 rm -rf /root/.composer
-ln -s /home/ubuntu/.composer /root/.composer
+ln -s /home/vagrant/.composer /root/.composer
 
 echo "===== tweak mbstring ====="
 
@@ -87,7 +87,7 @@ echo "===== Installing abuseio environment ======"
 cp /tmp/.env /abuseio/.env
 
 echo "===== Fixing file permisions ====="
-#sudo chown -R ubuntu:ubuntu  /abuseio
+#sudo chown -R vagrant:vagrant  /abuseio
 sudo chmod -R 750 /abuseio/storage
 sudo chmod 755 /abuseio/bootstrap/cache
 
@@ -96,19 +96,19 @@ cd /abuseio
 
 echo "===== Workaround MacOS NFS ====="
 # https://github.com/mitchellh/vagrant/issues/8061#issuecomment-291954060
-sudo -u ubuntu find . -type d \
+sudo -u vagrant find . -type d \
 	-exec touch '{}'/.touch ';' \
 	-exec rm -f '{}'/.touch ';' \
 	2>/dev/null
 
-sudo -u ubuntu composer update
+sudo -u vagrant composer update
 cp /tmp/.env /abuseio/.env
 
 cd /abuseio
-sudo -u ubuntu php artisan migrate:install
-sudo -u ubuntu php artisan migrate
-sudo -u ubuntu php artisan key:generate
-sudo -u ubuntu php artisan db:seed
+sudo -u vagrant php artisan migrate:install
+sudo -u vagrant php artisan migrate
+sudo -u vagrant php artisan key:generate
+sudo -u vagrant php artisan db:seed
 
 echo "===== Nginx / php-fpm restart ====="
 service php7.0-fpm restart
