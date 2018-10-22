@@ -1,7 +1,7 @@
 ## AbuseIO Vagrant
 
-### What is it
-The repository contains a Vagrantfile and some specific config files to create a development environment for AbuseIO using Vagrant.
+### What is it (DISCLAIMER)
+This branch has config files to create a development environment for AbuseIO using Vagrant running in php 7.2, the current AbuseIO doesn't work in php 7.2 yet and this branch is only for test purposes of a specific AbuseIO dev branch. It should not be used for normal development yet.
 
 #### About Vagrant
 Vagrant is a tool for building complete development environments. With an easy-to-use workflow and focus on automation, Vagrant 
