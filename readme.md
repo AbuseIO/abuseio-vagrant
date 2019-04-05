@@ -1,7 +1,7 @@
 ## AbuseIO Vagrant
 
 ### What is it
-The repository contains a Vagrantfile and some specific config files to create a development environment for AbuseIO using Vagrant.
+The repository contains a Vagrantfile and some specific config files to create a development environment for AbuseIO 4.1 using Vagrant.
 
 #### About Vagrant
 Vagrant is a tool for building complete development environments. With an easy-to-use workflow and focus on automation, Vagrant 
