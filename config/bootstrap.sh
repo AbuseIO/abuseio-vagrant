@@ -18,10 +18,17 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password password $MY
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD"
 
 # install packages
-DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	nginx beanstalkd mysql-server mysql-client\
-	php php-mail-mimedecode php-cli php-curl php-mysql php-pear php-pgsql php-intl php-bcmath\
-	php-dev php-mcrypt php-mbstring php-fpm php-zip git unzip fetchmail supervisor
+DEBIAN_FRONTEND=noninteractive apt-get install -y gcc make autoconf libc-dev \
+ pkg-config nginx beanstalkd mysql-server mysql-client php-cli php-curl php-mysql \
+ php-pear php-pgsql php-intl php-bcmath php-mbstring php-fpm php-zip php-dev \
+ libmcrypt-dev git re2c unzip fetchmail supervisor
+
+# install php-mcrypt
+pecl install mcrypt-1.0.1 <<<''
+echo "extension=mcrypt.so" > /etc/php/7.2/mods-available/mcrypt.ini
+
+# install php-mail-mimedecode
+pear install Mail_mimeDecode
 
 echo "===== Updating mysql config ====="
 
@@ -38,11 +45,11 @@ rm -f /etc/nginx/sites-enabled/*
 ln -s /etc/nginx/sites-available/abuseio.conf /etc/nginx/sites-enabled
 
 echo "===== Tweaking php-fpm ====="
-sed -i -e "s/listen = \/run\/php\/php7.0-fpm.sock/listen = 127.0.0.1:9000/g" \
-    /etc/php/7.0/fpm/pool.d/www.conf
+sed -i -e "s/listen = \/run\/php\/php7.2-fpm.sock/listen = 127.0.0.1:9000/g" \
+    /etc/php/7.2/fpm/pool.d/www.conf
 
-sed -i -e "s/^user = www-data/user = vagrant/g" /etc/php/7.0/fpm/pool.d/www.conf
-sed -i -e "s/^group = www-data/group = vagrant/g" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i -e "s/^user = www-data/user = vagrant/g" /etc/php/7.2/fpm/pool.d/www.conf
+sed -i -e "s/^group = www-data/group = vagrant/g" /etc/php/7.2/fpm/pool.d/www.conf
 
 echo "===== Creating AbuseIO database user ====="
 
@@ -72,14 +79,14 @@ ln -s /home/vagrant/.composer /root/.composer
 
 echo "===== tweak mbstring ====="
 
-cp /usr/include/php/20151012/ext/mbstring/libmbfl/mbfl/mbfilter.h .
+cp /usr/include/php/20170718/ext/mbstring/libmbfl/mbfl/mbfilter.h .
 awk '/#define MBFL_MBFILTER_H/{print;print "#undef HAVE_MBSTRING\n#define HAVE_MBSTRING 1";next}1' \
-    mbfilter.h > /usr/include/php/20151012/ext/mbstring/libmbfl/mbfl/mbfilter.h
+    mbfilter.h > /usr/include/php/20170718/ext/mbstring/libmbfl/mbfl/mbfilter.h
 
 echo "===== installing mailparse ====="
 
 pecl install mailparse
-echo "extension=mailparse.so" > /etc/php/7.0/mods-available/mailparse.ini
+echo "extension=mailparse.so" > /etc/php/7.2/mods-available/mailparse.ini
 phpenmod mailparse
 phpenmod mcrypt
 
@@ -111,7 +118,7 @@ sudo -u vagrant php artisan key:generate
 sudo -u vagrant php artisan db:seed
 
 echo "===== Nginx / php-fpm restart ====="
-service php7.0-fpm restart
+service php7.2-fpm restart
 service nginx restart
 
 echo "===== Installing supervisor config ====="
