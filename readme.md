@@ -46,6 +46,6 @@ Just type
 
     vagrant up
 
-and connect to [http://localhost:8080/admin]
+and connect to [http://localhost:8080/admin], login with user `admin@isp.local` and password `admin`
 
 
